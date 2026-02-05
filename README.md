@@ -24,3 +24,9 @@ training-analyzer/
 ├─ output/      # グラフ出力
 └─ README.md
 ```
+## How to run
+
+```bash
+pip install pandas
+python src/main.py
+```
