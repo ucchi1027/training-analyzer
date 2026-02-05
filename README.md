@@ -24,7 +24,7 @@ training-analyzer/
 ├─ output/      # グラフ出力
 └─ README.md
 ```
-## How to run
+## 実行方法
 
 ```bash
 pip install pandas
