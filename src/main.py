@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def calc_e1rm(weight: float, reps: int, k: float) -> float:
-    # estimated 1RM
+    # estimated 1RM: weight * (1 + reps / k)
     return weight * (1 + reps / k)
 
 
@@ -19,13 +19,17 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
     ex["date"] = pd.to_datetime(ex["date"])
     ex = ex.sort_values("date")
 
+    # volume（その日の総負荷量）
     ex["volume"] = ex["weight"] * ex["reps"] * ex["sets"]
+
+    # 1日が複数行あるときに日別にまとめる
     daily = ex.groupby("date", as_index=False).agg(
-        weight=("weight", "max"),
-        reps=("reps", "max"),
-        volume=("volume", "sum"),
+        weight=("weight", "max"),   # その日の最大重量（簡易）
+        reps=("reps", "max"),       # その日の最大回数（簡易）
+        volume=("volume", "sum"),   # その日の総ボリューム
     )
 
+    # 種目ごとの k
     K_MAP = {
         "bench_press": 40.0,
         "squat": 30.0,
@@ -33,8 +37,13 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
     }
     k = K_MAP.get(exercise_name, 30.0)
 
-    daily["e1rm"] = daily.apply(lambda r: calc_e1rm(float(r["weight"]), int(r["reps"]), k), axis=1)
+    # e1RM
+    daily["e1rm"] = daily.apply(
+        lambda r: calc_e1rm(float(r["weight"]), int(r["reps"]), k),
+        axis=1
+    )
 
+    # ===== グラフ保存 =====
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     out_path = Path(output_dir) / f"{exercise_name}_e1rm.png"
 
@@ -50,14 +59,16 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
 
     print(f"saved: {out_path}")
 
+    # ===== 停滞判定 =====
     if len(daily) < 4:
-    print(f"{exercise_name}: not enough data to judge stagnation (need >= 4 days)")
-    return
+        print(f"{exercise_name}: not enough data to judge stagnation (need >= 4 days)")
+        return
 
-recent = daily.tail(2)["e1rm"]
-past_best = daily.head(len(daily) - 2)["e1rm"].max()
-stagnating = recent.max() <= past_best
+    recent = daily.tail(2)["e1rm"]                         # 直近2回
+    past_best = daily.head(len(daily) - 2)["e1rm"].max()   # それ以前の最高
+    stagnating = recent.max() <= past_best
 
+    print(f"{exercise_name}: {'stagnating' if stagnating else 'not stagnating'}")
 
 
 def main(csv_path: str) -> None:
@@ -75,3 +86,4 @@ def main(csv_path: str) -> None:
 if __name__ == "__main__":
     csv_path = sys.argv[1] if len(sys.argv) > 1 else "data/training_log_sample.csv"
     main(csv_path)
+
