@@ -11,7 +11,7 @@ def calc_e1rm(weight: float, reps: int, k: float) -> float:
 
 
 K_MAP = {
-    "bench_press": 40.0,  # あなたの式: weight * (1 + reps/40)
+    "bench_press": 40.0, 
     "squat": 30.0,
     "deadlift": 30.0,
 }
