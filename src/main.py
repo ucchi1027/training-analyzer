@@ -35,7 +35,7 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
         volume=("volume", "sum"),
     )
 
-    # 種目ごとのk（あなたの指定：ベンチは40、スクワット/デッドは30）
+    # 種目ごとのk（ベンチは40、スクワット/デッドは30）
     K_MAP = {
         "bench_press": 40.0,
         "squat": 30.0,
@@ -65,7 +65,7 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
 
     print(f"saved: {out_path}")
 
-    # ===== 停滞判定（ブレに強い版：直近3平均 vs その前3平均） =====
+    # ===== 停滞判定 =====
     # 判定には最低6回分（直近3 + その前3）が必要
     if len(daily) < 6:
         print(f"{exercise_name}: not enough data to judge stagnation (need >= 6 days)")
