@@ -50,15 +50,14 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
 
     print(f"saved: {out_path}")
 
-    if len(daily) < 6:
-        print(f"{exercise_name}: not enough data to judge stagnation (need >= 6 days)")
-        return
+    if len(daily) < 4:
+    print(f"{exercise_name}: not enough data to judge stagnation (need >= 4 days)")
+    return
 
-    recent = daily.tail(3)["e1rm"]
-    past_best = daily.head(len(daily) - 3)["e1rm"].max()
-    stagnating = recent.max() <= past_best
+recent = daily.tail(2)["e1rm"]
+past_best = daily.head(len(daily) - 2)["e1rm"].max()
+stagnating = recent.max() <= past_best
 
-    print(f"{exercise_name}: {'stagnating' if stagnating else 'not stagnating'}")
 
 
 def main(csv_path: str) -> None:
