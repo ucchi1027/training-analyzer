@@ -52,7 +52,7 @@ def analyze_exercise_e1rm(df: pd.DataFrame, exercise_name: str, output_dir: str)
 
     print(f"saved: {out_path}")
 
-    # 停滞判定（最低4日分必要）
+    # 停滞判定
     if len(daily) < 4:
         print(f"{exercise_name}: not enough data to judge stagnation (need >= 4 days)")
         return
