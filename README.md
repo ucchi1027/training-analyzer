@@ -1,15 +1,15 @@
 # Training Analyzer
 
-筋トレ記録をPythonで分析し、成長の停滞を検出して改善提案を行うツールです。
+筋トレ記録（CSV）をPythonで分析し、成長の停滞を検出して可視化するツールです。
 
 ## 背景
 筋トレの記録は取っていても、「どの種目が停滞しているのか」「次に何を改善すべきか」が分かりにくいと感じたため、本ツールを作成しました。
 
 ## 機能
 - 筋トレ記録（CSV）の読み込み
-- 種目ごとのトレーニングボリューム分析
-- 成長停滞の検出
-- 改善案の自動提示（ルールベース）
+- 種目ごとの推定1RM（e1RM）推移グラフの生成（PNG出力）
+- 成長停滞の検出（stagnating / not stagnating を表示）
+- ※改善案の自動提示は今後拡張予定（ルールベース）
 
 ## 使用技術
 - Python
@@ -19,14 +19,9 @@
 ## ディレクトリ構成
 ```text
 training-analyzer/
-├─ data/        # トレーニング記録CSV
+├─ data/        # 入力CSV（サンプル）
 ├─ src/         # Pythonコード
-├─ output/      # グラフ出力
+├─ output/      # グラフ出力（PNG）
+├─ requirements.txt
 └─ README.md
-```
-## 実行方法
 
-```bash
-pip install pandas
-python src/main.py
-```
