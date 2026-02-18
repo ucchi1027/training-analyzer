@@ -24,3 +24,25 @@ training-analyzer/
 ├─ output/      # グラフ出力（PNG）
 ├─ requirements.txt
 └─ README.md
+```
+
+## 実行方法
+1.依存ライブラリをインストール
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+
+2.サンプルデータで実行（BIG3（ベンチプレス、スクワット、デッドリフト）のグラフPNGが output/ に生成されます）
+
+```powershell
+python .\src\main.py .\data\training_log_sample.csv
+```
+
+## サンプルデータについて
+
+data/training_log_sample.csv は「停滞しているケース（伸びが見られない例）」として作成しています。
+そのため実行すると、BIG3 はすべて stagnating と表示されます。
+
+※実データでは、伸びている期間は not stagnating になる想定です。
